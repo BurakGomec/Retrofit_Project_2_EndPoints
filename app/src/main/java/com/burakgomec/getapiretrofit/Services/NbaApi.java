@@ -1,6 +1,6 @@
 package com.burakgomec.getapiretrofit.Services;
 
-import com.burakgomec.getapiretrofit.Models.TeamModel;
+import com.burakgomec.getapiretrofit.Models.BasketballModels.TeamModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

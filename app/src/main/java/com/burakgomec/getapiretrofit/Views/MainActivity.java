@@ -6,15 +6,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Button;
 
-import com.burakgomec.getapiretrofit.Adapters.RecyclerViewAdapter;
-import com.burakgomec.getapiretrofit.Models.Datum;
-import com.burakgomec.getapiretrofit.Models.TeamModel;
+import com.burakgomec.getapiretrofit.Adapters.TeamsListRecyclerAdapter;
+import com.burakgomec.getapiretrofit.Models.BasketballModels.Datum;
+import com.burakgomec.getapiretrofit.Models.BasketballModels.TeamModel;
+import com.burakgomec.getapiretrofit.Models.MoviesModel.MoviesModel;
 import com.burakgomec.getapiretrofit.R;
+import com.burakgomec.getapiretrofit.Services.MovieApi;
 import com.burakgomec.getapiretrofit.Services.NbaApi;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,24 +32,64 @@ public class MainActivity extends AppCompatActivity {
     List<Datum> data;
     Retrofit retrofit;
     RecyclerView recyclerView;
+    ArrayList<MoviesModel> moviesModelList;
+    Button buttonTeamList, movieList;
     //https://free-nba.p.rapidapi.com/teams?page=0
-    //Get Request Basketball Teams
+    //Get Request Nba Teams List
+
+    //https://api.androidhive.info/json/movies.json
+    //Get Request Movies List
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        buttonTeamList = findViewById(R.id.buttonBasketballTeams);
+        movieList = findViewById(R.id.buttonMoviesList);
 
         Gson gson = new GsonBuilder().setLenient().create();
         String urlBaseNbaApi = "https://free-nba.p.rapidapi.com/";
+        String urlBaseMovieApi = "https://api.androidhive.info/";
+
+        retrofit = new Retrofit.Builder().baseUrl(urlBaseMovieApi).
+                addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        pullMoviesList();
+
+        /*
         retrofit= new Retrofit.Builder().baseUrl(urlBaseNbaApi)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
-        pullData();
+        pullNbaTeamData();
+
+         */
     }
 
-    private void pullData(){
+    private void pullMoviesList(){
+        MovieApi movieApi = retrofit.create(MovieApi.class);
+        Call<List<MoviesModel>> moviesModelCall = movieApi.getData();
+        moviesModelCall.enqueue(new Callback<List<MoviesModel>>() {
+            @Override
+            public void onResponse(Call<List<MoviesModel>> call, Response<List<MoviesModel>> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    System.out.println(response.body());
+                    moviesModelList = (ArrayList<MoviesModel>) response.body();
+                    for(MoviesModel moviesModel : moviesModelList){
+                        System.out.println(moviesModel.title);
+                    }
+                }
+
+            }
+            @Override
+            public void onFailure(Call<List<MoviesModel>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void pullNbaTeamData(){
         NbaApi nbaApi = retrofit.create(NbaApi.class);
         Call<TeamModel> teamModelCall = nbaApi
                 .getData("","");
@@ -66,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void fillRecyclerView(){
-        recyclerView = findViewById(R.id.recyclerView);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(data);
+        recyclerView = findViewById(R.id.recyclerViewMoviesList);
+        TeamsListRecyclerAdapter recyclerViewAdapter = new TeamsListRecyclerAdapter(data);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext(),RecyclerView.HORIZONTAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(recyclerViewAdapter);
