@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
@@ -12,6 +14,7 @@ import com.burakgomec.getapiretrofit.Adapters.TeamsListRecyclerAdapter;
 import com.burakgomec.getapiretrofit.Models.BasketballModels.Datum;
 import com.burakgomec.getapiretrofit.Models.BasketballModels.TeamModel;
 import com.burakgomec.getapiretrofit.Models.MoviesModel.MoviesModel;
+import com.burakgomec.getapiretrofit.MoviesActivity;
 import com.burakgomec.getapiretrofit.R;
 import com.burakgomec.getapiretrofit.Services.MovieApi;
 import com.burakgomec.getapiretrofit.Services.NbaApi;
@@ -32,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     List<Datum> data;
     Retrofit retrofit;
     RecyclerView recyclerView;
-    ArrayList<MoviesModel> moviesModelList;
+    ArrayList<MoviesModel> moviesList;
     Button buttonTeamList, movieList;
     //https://free-nba.p.rapidapi.com/teams?page=0
     //Get Request Nba Teams List
@@ -66,6 +69,21 @@ public class MainActivity extends AppCompatActivity {
 
          */
     }
+    public void showBasketballFragment(View view){
+
+    }
+
+    public void showMoviesFragment(View view){
+        /*
+        MoviesFragment moviesFragment = new MoviesFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,moviesFragment);
+
+         */
+
+        Intent intent = new Intent (this,MoviesActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     private void pullMoviesList(){
         MovieApi movieApi = retrofit.create(MovieApi.class);
@@ -75,9 +93,9 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<MoviesModel>> call, Response<List<MoviesModel>> response) {
                 if(response.isSuccessful() && response.body() != null){
                     System.out.println(response.body());
-                    moviesModelList = (ArrayList<MoviesModel>) response.body();
-                    for(MoviesModel moviesModel : moviesModelList){
-                        System.out.println(moviesModel.title);
+                    moviesList = (ArrayList<MoviesModel>) response.body();
+                    for(MoviesModel moviesModel : moviesList){
+                        System.out.println(moviesModel.rating);
                     }
                 }
 
