@@ -55,7 +55,6 @@ public class MoviesListRecyclerAdapter extends RecyclerView.Adapter<MoviesListRe
 
         }
         holder.genre.setText(genres);
-        //holder.itemView.setBackgroundColor(Color.RED);
     }
 
     @Override
