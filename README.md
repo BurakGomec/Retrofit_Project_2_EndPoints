@@ -2,14 +2,16 @@
 **In this project, get request is made with rxjava and retrofit using 2 endpoints.**
 
 ## What's Done In This Project
+**Used a random background with recyclerview adapter color in nba teams list.**
+**Progress bar matched "OnNext" method in Rxjava.**
 
 
 ## Which API's Were Used In The Project
-**MoviesApi(EndPoint1) => https://api.androidhive.info/json/movies.json**
+**Movies Api(EndPoint1) => https://api.androidhive.info/json/movies.json**
 
-**NbaTeamsApi(EndPoint2) => https://free-nba.p.rapidapi.com/teams?page=0**
+**Nba Teams Api(EndPoint2) => https://free-nba.p.rapidapi.com/teams?page=0**
 
-**Second nba teams api will ask for api key, you can get api key for testing from this site for free.
+**Second nba teams api will ask for api key, you can get api key for testing free from this site.
 =>https://rapidapi.com/theapiguy/api/free-nba?endpoint=apiendpoint_3621fed2-e280-4bdf-9dd8-6a090b0ad7ac**
 
 
